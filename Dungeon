@@ -1,0 +1,192 @@
+# -*- coding: utf-8 -*-
+
+from sys import exit
+
+lock8 = False
+health = []
+inventory = []
+
+def start():
+    del health [0:2]
+    del inventory [0:1]
+    room_0()
+
+def me():
+    print health
+
+
+def room_0():
+    print u"""
+    Ты находишься в тёмной комнате. Озорной карлик крадет твой нос
+    и убегает неизвестно куда. Придётся найти его, если хочешь попасть домой.
+    В комнате две двери.
+    1. Справа. Дверь деревянная - старая и пыльная, богохульственные узоры на которой обладают каким-то
+    странным свойством, будто дополнительным измерением.
+    Вид этих необычных знаков вызывал в душе страх столь древний, что сложно представить.
+    2. Слева. Вертикальная металлическая дверь, мигающая непонятными лампочками со строгими,
+    рубленными иероглифами.
+    В какую из дверей пойдешь?
+    (набери 1 или 2 и enter)
+    """
+
+    choice = raw_input("> ")
+
+    if choice == "1":
+        cthulhu_room()
+    elif choice == "2":
+        alien_room()
+
+def death():
+    print u"Рестарт."
+    start()
+
+def cthulhu_room():
+    print u"Ктулху.\n 1. Пройти + зеленый \n 2. Пройти и не покалечиться."
+
+    choice = raw_input("> ")
+
+    if "2" in choice:
+        print u"круто проведя время, ты идешь дальше."
+        room_4()
+
+    else:
+        health.append('зеленый')
+        print u"ты получил дергающийся глаз и прошел дальше."
+        room_4()
+
+def room_4():
+    print u"скелеты. 1.пройти мимо.\n 2. позырить на сокровище 'b'."
+    choice = raw_input("> ")
+
+    if "1" in choice:
+        print u"ты идешь дальше."
+        room_6()
+    elif "2" in choice:
+        room_b()
+
+def room_b():
+    print u"ты палишь на сокровище.\n 1. Забрать его. \n 2. в комнату 6."
+    choice = raw_input("> ")
+    if "1" in choice:
+        print u"сокровище \"b\" у тебя. Ты направляешься в комнату 6."
+        inventory.append('b')
+        room_6()
+    elif "2" in choice:
+        room_6()
+
+
+def room_6():
+    print u"роботы. 1.пройти очевидно и +красный. 2. Пройти неочевидно (подлокация)."
+    choice = raw_input("> ")
+    if "1" in choice:
+        print u"по пути ты получаешь состояние 'красный'"
+        health.append('красный')
+        print u"ты проходишь в комнату 8."
+        room_8 ()
+    if "2" in choice:
+        print u"ты заметил нечто неладное, прошел комнату через три пизды и не зря."
+        room_8
+
+def alien_room():
+    print u"""
+    инопланетяне, всё в непонятно чём, дверь закрыта, пульт, один рычаг(1) явно открывает дверь,
+    другой (2) не то накажет, не то одарит.
+    1. Дернуть рычаг, открыть дверь.
+    2. Дернуть непонятный рычаг."""
+    choice = raw_input("> ")
+    if "1" in choice:
+        alien_room_open_the_door()
+    elif "2" in choice:
+        alien_room_open_append()
+    else:
+        print u" /// В комнате играет музыка из 'Секретных материалов' /// "
+        alien_room()
+
+def alien_room_open_the_door():
+    print u"Открылась дверь в следующую комнату. Идти в нее?\n1.Да\n2.Нет"
+    choice = raw_input("> ")
+    if "1" in choice:
+        room_3()
+    elif "2" in choice:
+        print u"Дверь повисела и закрылась."
+        alien_room()
+
+def alien_room_open_append():
+    print u"потайная комната, тут можно вылечить все болезни разом\n1. Вылечить.\n2. Зайду по-позже."
+    choice = raw_input("> ")
+    if "1" in choice:
+        del health[0:2]
+    elif "2" in choice:
+        alien_room()
+
+def room_3():
+    print u"растения. Можно 1. подобрать С (и получить \"Желтый\") или 2. пройти дальше."
+    choice = raw_input("> ")
+    if "1" in choice:
+        health.append('желтый')
+        inventory = open("inv.txt","a")
+        inventory.write(u"с,")
+        inventory.close()
+        print u"ты подобрал C и убежал от греха подальше (ну как подальше, в соседнюю комнату)"
+        room_5()
+    elif "2" in choice:
+        room_5()
+
+def room_5():
+    print u"клоуны 1. получить \"белый\" и уйти 2. получить \"белый\" и уйти."
+    choice = raw_input("> ")
+    if "1" or "2" in choice:
+        health.append('белый')
+        room_7()
+    else:
+        print u"Ты сам стал клоуном и остался здесь навечно."
+        dead()
+
+def room_7():
+    print u"""здесь есть есть три двери и панель с пазами для b и c
+    1. К роботам (ком 6).
+    2. К клоунам (ком 5).
+    3. В деревянную дверь.
+    4. Вставить b и c в пазы панели."""
+    choice = raw_input("> ")
+    if "1" in choice:
+        room_6()
+    elif "2" in choice:
+        room_5()
+    elif "3" in choise:
+        room_8
+    elif "4" in choise:
+        lock()
+
+def lock():
+    # сюда нужно положить b и c
+    inventory = open("inv.txt","a")
+    code1 = inventory.read()
+    if code1 == "b\nc" or "c\nb" :
+        print u"Поздравляю! Ты можешь пройти в следующую комнату!"
+        lock8 = True
+        room_7
+    else:
+        print u"Ты принёс не то или не всё."
+
+def room_8():
+    if lock8 = True:
+        print u"трибуна. 1. В комнату с роботами 2. в комнату в клоунами 3. к носу"
+        choice = raw_input("> ")
+    else:
+        print u"дверь закрыта"
+
+def room_81():
+    print u"Неодобрение. 1. Назад. 2. Вперед."
+    choice = raw_input("> ")
+
+def room_82():
+    print u"Неодобрение. 1. Назад. 2. Вперед."
+    choice = raw_input("> ")
+
+def room_83():
+    print u"Неодобрение. 1. Назад. 2. Вперед."
+    choice = raw_input("> ")
+
+
+start()
